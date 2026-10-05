@@ -1,0 +1,8 @@
+para copiar contiene varias cosas. 
+
+Include y Lib van a la carpeta MingW del codeblocks
+
+y luego el .dll que hay en windows system de esta misma carpeta va a SysWow64
+
+
+despues hay que linkear las librerias en el IDE, hay que hacerlo desde la global, la lista esta en el moodle
