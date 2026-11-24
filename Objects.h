@@ -32,6 +32,7 @@
 #define EDIFICIO_ID     20
 #define PAPELERA_ID     21
 #define PALMERA_ID      22
+#define PISO_ID         23
 #define COCHE_ID	    500
 
 

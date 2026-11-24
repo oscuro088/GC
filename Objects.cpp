@@ -105,6 +105,15 @@ TPrimitiva::TPrimitiva(int DL, int t)
             modelo1 = NULL;
             break;
 		}
+		case PISO_ID: {
+            tx = ty = tz = 0;
+
+            memcpy(colores, coloresr_c, 8*sizeof(float));
+
+            modelo0 = Load3DS("../../Modelos/piso.3ds", &num_vertices0);
+            modelo1 = NULL;
+            break;
+		}
 		case COCHE_ID: { // Creación del coche
 
 		    tx = -2.0;
@@ -204,6 +213,7 @@ void __fastcall TPrimitiva::Render(int seleccion, bool reflejo)
             }
             break;
         }
+        case PISO_ID:
         case PALMERA_ID: {
             if (escena.show_road) {
                 // Cálculo de la ModelView
@@ -525,6 +535,7 @@ void __fastcall TEscena::CrearEscenario()
     TPrimitiva *papelera1 = new TPrimitiva(PAPELERA_ID,PAPELERA_ID);
 
     TPrimitiva *palmera1 = new TPrimitiva(PALMERA_ID,PALMERA_ID);
+    TPrimitiva *piso1 = new TPrimitiva(PISO_ID, PISO_ID);
 
 
 
@@ -544,6 +555,11 @@ void __fastcall TEscena::CrearEscenario()
     palmera1-> tx = 0;
     palmera1-> tz = 3;
 
+    // Compensar el desplazamiento del modelo exportado y situarlo al fondo.
+    piso1->tx = 70.0f;
+    piso1->ty = 3.1f;
+    piso1->tz = -77.0f;
+
 
     edificio1->colores[0][1]=0.8;
 
@@ -559,6 +575,7 @@ void __fastcall TEscena::CrearEscenario()
     AddObject(edificio2);
     AddObject(papelera1);
     AddObject(palmera1);
+    AddObject(piso1);
     // Añadir coches
     AddCar(car1);
     AddCar(car2);
