@@ -81,6 +81,30 @@ TPrimitiva::TPrimitiva(int DL, int t)
             modelo1 = NULL;
             break;
 		}
+		case PAPELERA_ID: {  // Creación de la papelera
+		    tz = ty = 0;
+            tx = -27;
+
+            memcpy(colores, coloresr_c, 8*sizeof(float));
+
+            //************************ Cargar modelos 3ds ***********************************
+            // formato 8 floats por vértice (x, y, z, A, B, C, u, v)
+            modelo0 = Load3DS("../../Modelos/papelera.3ds", &num_vertices0);
+            modelo1 = NULL;
+            break;
+		}
+		case PALMERA_ID: {  // Creación de la papelera
+		    tz = ty = 0;
+            tx = -27;
+
+            memcpy(colores, coloresr_c, 8*sizeof(float));
+
+            //************************ Cargar modelos 3ds ***********************************
+            // formato 8 floats por vértice (x, y, z, A, B, C, u, v)
+            modelo0 = Load3DS("../../Modelos/palmera2.3ds", &num_vertices0);
+            modelo1 = NULL;
+            break;
+		}
 		case COCHE_ID: { // Creación del coche
 
 		    tx = -2.0;
@@ -157,7 +181,53 @@ void __fastcall TPrimitiva::Render(int seleccion, bool reflejo)
                 glDrawArrays(GL_TRIANGLES, 0, num_vertices0);
             }
             break;
-        } // case CARRETERA_ID:
+             }
+             case PAPELERA_ID: {
+            if (escena.show_road) {
+                // Cálculo de la ModelView
+                modelMatrix     = glm::mat4(1.0f); // matriz identidad
+
+                modelMatrix     = glm::translate(modelMatrix, glm::vec3(tx, ty, tz));
+                modelMatrix     = glm::rotate(modelMatrix, (float) glm::radians(ry), glm::vec3(0,1,0)); // rotación alrededor del eje y en radianes
+
+                modelViewMatrix = escena.viewMatrix * modelMatrix;
+                // Envía nuestra ModelView al Vertex Shader
+                glUniformMatrix4fv(escena.uMVMatrixLocation, 1, GL_FALSE, &modelViewMatrix[0][0]);
+
+                // Pintar la carretera
+                glUniform4fv(escena.uColorLocation, 1, colores[0]);
+                //                   Asociamos los vértices y sus normales
+                glVertexAttribPointer(escena.aPositionLocation, POSITION_COMPONENT_COUNT, GL_FLOAT, false, STRIDE, modelo0);
+                glVertexAttribPointer(escena.aNormalLocation, NORMAL_COMPONENT_COUNT, GL_FLOAT, false, STRIDE, modelo0+3);
+
+                glDrawArrays(GL_TRIANGLES, 0, num_vertices0);
+            }
+            break;
+        }
+        case PALMERA_ID: {
+            if (escena.show_road) {
+                // Cálculo de la ModelView
+                modelMatrix     = glm::mat4(1.0f); // matriz identidad
+
+                modelMatrix     = glm::translate(modelMatrix, glm::vec3(tx, ty, tz));
+                modelMatrix     = glm::rotate(modelMatrix, (float) glm::radians(ry), glm::vec3(0,1,0)); // rotación alrededor del eje y en radianes
+
+                modelViewMatrix = escena.viewMatrix * modelMatrix;
+                // Envía nuestra ModelView al Vertex Shader
+                glUniformMatrix4fv(escena.uMVMatrixLocation, 1, GL_FALSE, &modelViewMatrix[0][0]);
+
+                // Pintar la carretera
+                glUniform4fv(escena.uColorLocation, 1, colores[0]);
+                //                   Asociamos los vértices y sus normales
+                glVertexAttribPointer(escena.aPositionLocation, POSITION_COMPONENT_COUNT, GL_FLOAT, false, STRIDE, modelo0);
+                glVertexAttribPointer(escena.aNormalLocation, NORMAL_COMPONENT_COUNT, GL_FLOAT, false, STRIDE, modelo0+3);
+
+                glDrawArrays(GL_TRIANGLES, 0, num_vertices0);
+            }
+            break;
+        }
+
+         // case CARRETERA_ID:
         case COCHE_ID: {
             if (escena.show_car) {
                 glUniform4fv(escena.uColorLocation, 1, (const GLfloat *) colores[0]);
@@ -452,6 +522,12 @@ void __fastcall TEscena::CrearEscenario()
     TPrimitiva *edificio1 = new TPrimitiva(EDIFICIO_ID, EDIFICIO_ID);
     TPrimitiva *edificio2 = new TPrimitiva(EDIFICIO_ID, EDIFICIO_ID);
 
+    TPrimitiva *papelera1 = new TPrimitiva(PAPELERA_ID,PAPELERA_ID);
+
+    TPrimitiva *palmera1 = new TPrimitiva(PALMERA_ID,PALMERA_ID);
+
+
+
     road2->tx = 0;
     road2->tz = 16;
 
@@ -461,6 +537,13 @@ void __fastcall TEscena::CrearEscenario()
     car2->colores[0][3] = 1.0;
     car2->tx = 2;
     car2->tz = 3;
+
+    papelera1-> tx = 0;
+    papelera1-> tz = 3;
+
+    palmera1-> tx = 0;
+    palmera1-> tz = 3;
+
 
     edificio1->colores[0][1]=0.8;
 
@@ -474,7 +557,8 @@ void __fastcall TEscena::CrearEscenario()
     AddObject(road2);
     AddObject(edificio1);
     AddObject(edificio2);
-
+    AddObject(papelera1);
+    AddObject(palmera1);
     // Añadir coches
     AddCar(car1);
     AddCar(car2);
