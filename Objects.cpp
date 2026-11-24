@@ -555,9 +555,9 @@ void __fastcall TEscena::CrearEscenario()
     palmera1-> tx = 0;
     palmera1-> tz = 3;
 
-    // Compensar el desplazamiento de la malla para centrar el piso en X y Z.
+    // Centrar el piso en X y Z y alinear su base con Y = 0.
     piso1->tx = 69.99f;
-    piso1->ty = 3.1f;
+    piso1->ty = 3.2728481f;
     piso1->tz = -35.0f;
 
 
