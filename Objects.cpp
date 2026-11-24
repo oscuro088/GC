@@ -555,10 +555,10 @@ void __fastcall TEscena::CrearEscenario()
     palmera1-> tx = 0;
     palmera1-> tz = 3;
 
-    // Compensar el desplazamiento del modelo exportado y situarlo al fondo.
-    piso1->tx = 70.0f;
+    // Compensar el desplazamiento de la malla para centrar el piso en X y Z.
+    piso1->tx = 69.99f;
     piso1->ty = 3.1f;
-    piso1->tz = -77.0f;
+    piso1->tz = -35.0f;
 
 
     edificio1->colores[0][1]=0.8;
